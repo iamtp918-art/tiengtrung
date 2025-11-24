@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chinese Mastery - Developer Trần Tấn Phát</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@400;500;700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="brand">
+            <button id="mobile-menu-btn" class="mobile-menu-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            </button>
+
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+            <h1>ChineseMastery</h1>
+        </div>
+
+        <button id="pinyin-btn" class="pinyin-trigger-btn">
+            <span class="pinyin-icon">🗣️</span> 
+            <span class="pinyin-text">Bảng Pinyin</span>
+        </button>
+
+        <div class="progress-badge">
+            <span>🏆</span> <span id="user-level-badge">Cấp độ 1</span>
+        </div>
+    </header>
+
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+    <div class="app-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-title">Lộ trình học tập</div>
+            <div id="lesson-list">
+                </div>
+        </aside>
+
+        <main class="main-view">
+            <div id="welcome-screen" class="welcome-screen">
+                <div class="welcome-icon">👋</div>
+                <h2>Chào mừng bạn trở lại!</h2>
+                <p>Chọn bài học từ danh sách để bắt đầu hành trình chinh phục tiếng Trung.</p>
+            </div>
+
+            <div id="lesson-content-area" class="content-card hidden">
+                <div class="lesson-header">
+                    <h2 id="current-lesson-title">Bài học</h2>
+                    <p id="current-lesson-desc" style="color: var(--text-secondary);">Mô tả bài học</p>
+                </div>
+
+                <div class="nav-tabs">
+                    <button class="tab-btn active" onclick="switchTab('vocab')">Từ vựng</button>
+                    <button class="tab-btn" onclick="switchTab('chat')">Hội thoại</button>
+                    <button class="tab-btn" onclick="switchTab('quiz')">Kiểm tra</button>
+                </div>
+
+                <div id="vocab-view" class="view-pane active">
+                    <div class="vocab-grid" id="vocab-container">
+                        </div>
+                </div>
+
+                <div id="chat-view" class="view-pane">
+                    <div class="chat-container">
+                        <div class="chat-history" id="chat-messages">
+                            </div>
+                        <div class="chat-controls">
+                            <button id="mic-btn" class="chat-mic-btn" onclick="toggleRecording()" title="Bấm để nói tiếng Trung">
+                                🎙️
+                            </button>
+
+                            <input type="text" class="chat-input" id="chat-input" placeholder="Nhập hoặc bấm Mic để nói...">
+                            
+                            <button class="chat-send-btn" onclick="handleChatSubmit()">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="quiz-view" class="view-pane">
+                    <div class="quiz-wrapper">
+                        <div id="quiz-display"></div>
+                        <div class="feedback-area">
+                            <div id="quiz-feedback" class="feedback-msg"></div>
+                            <button id="next-lesson-btn" class="btn-next-level hidden" onclick="unlockNextLesson()">Mở khóa bài tiếp theo &rarr;</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        © 2025 Bản quyền thuộc về <span style="font-weight:700; color:var(--primary);">Developer Trần Tấn Phát</span>.
+        <br>
+        Liên hệ Telegram: <a href="https://t.me/useriamtp" target="_blank" class="tele-link">@useriamtp</a>
+    </footer>
+
+    <div id="pinyin-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Bảng Phiên Âm Latinh</h2>
+                <button class="close-modal-btn">✕</button>
+            </div>
+            
+            <div class="modal-body notebook-style">
+                
+                <div class="pinyin-section">
+                    <h3 class="notebook-title">I. Thanh Mẫu (Phụ âm)</h3>
+                    <div class="mapping-grid">
+                        <div class="mapping-col">
+                            <div class="map-item"><span>p</span> <span>→</span> <span class="vn-sound">p</span></div>
+                            <div class="map-item"><span>b</span> <span>→</span> <span class="vn-sound">p</span></div>
+                            <div class="map-item"><span>m</span> <span>→</span> <span class="vn-sound">m</span></div>
+                            <div class="map-item"><span>n</span> <span>→</span> <span class="vn-sound">n</span></div>
+                            <div class="map-item"><span>h</span> <span>→</span> <span class="vn-sound">h</span></div>
+                            <div class="map-item"><span>t</span> <span>→</span> <span class="vn-sound">th</span></div>
+                            <div class="map-item"><span>d</span> <span>→</span> <span class="vn-sound">t</span></div>
+                            <div class="map-item"><span>g</span> <span>→</span> <span class="vn-sound">c</span></div>
+                            <div class="map-item"><span>j</span> <span>→</span> <span class="vn-sound">ch</span></div>
+                            <div class="map-item"><span>q</span> <span>→</span> <span class="vn-sound">ch</span></div>
+                            <div class="map-item"><span>f</span> <span>→</span> <span class="vn-sound">ph</span></div>
+                            <div class="map-item"><span>x</span> <span>→</span> <span class="vn-sound">x</span></div>
+                            <div class="map-item"><span>z</span> <span>→</span> <span class="vn-sound">ch</span></div>
+                        </div>
+                        <div class="mapping-col">
+                            <div class="map-item"><span>zh</span> <span>→</span> <span class="vn-sound">tr</span></div>
+                            <div class="map-item"><span>c</span> <span>→</span> <span class="vn-sound">ch</span></div>
+                            <div class="map-item"><span>ch</span> <span>→</span> <span class="vn-sound">tr</span></div>
+                            <div class="map-item"><span>s</span> <span>→</span> <span class="vn-sound">s</span></div>
+                            <div class="map-item"><span>sh</span> <span>→</span> <span class="vn-sound">s</span></div>
+                            <div class="map-item"><span>y</span> <span>→</span> <span class="vn-sound">d</span></div>
+                            <div class="map-item"><span>w</span> <span>→</span> <span class="vn-sound">g / qu</span></div>
+                            <div class="map-item"><span>r</span> <span>→</span> <span class="vn-sound">r</span></div>
+                            <div class="map-item"><span>k</span> <span>→</span> <span class="vn-sound">kh</span></div>
+                            <div class="map-item"><span>l</span> <span>→</span> <span class="vn-sound">l</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="divider-dashed">
+
+                <div class="pinyin-section">
+                    <h3 class="notebook-title">II. Vận Mẫu (Nguyên âm)</h3>
+                    <div class="mapping-grid three-cols">
+                        <div class="mapping-col">
+                            <div class="map-item"><span>a</span> <span>→</span> <span class="vn-sound">a</span></div>
+                            <div class="map-item"><span>e</span> <span>→</span> <span class="vn-sound">ơ</span></div>
+                            <div class="map-item"><span>er</span> <span>→</span> <span class="vn-sound">ơr</span></div>
+                            <div class="map-item"><span>i</span> <span>→</span> <span class="vn-sound">i / ư</span></div>
+                            <div class="map-item"><span>u</span> <span>→</span> <span class="vn-sound">u / uy</span></div>
+                            <div class="map-item"><span>o</span> <span>→</span> <span class="vn-sound">uô</span></div>
+                            <div class="map-item"><span>ai</span> <span>→</span> <span class="vn-sound">ai</span></div>
+                            <div class="map-item"><span>ao</span> <span>→</span> <span class="vn-sound">ao</span></div>
+                            <div class="map-item"><span>ei</span> <span>→</span> <span class="vn-sound">ây</span></div>
+                            <div class="map-item"><span>ou</span> <span>→</span> <span class="vn-sound">âu</span></div>
+                            <div class="map-item"><span>ong</span> <span>→</span> <span class="vn-sound">ung</span></div>
+                        </div>
+                        <div class="mapping-col">
+                            <div class="map-item"><span>ui</span> <span>→</span> <span class="vn-sound">uây</span></div>
+                            <div class="map-item"><span>ue</span> <span>→</span> <span class="vn-sound">uê</span></div>
+                            <div class="map-item"><span>un</span> <span>→</span> <span class="vn-sound">uân</span></div>
+                            <div class="map-item"><span>uang</span> <span>→</span> <span class="vn-sound">oang</span></div>
+                            <div class="map-item"><span>an</span> <span>→</span> <span class="vn-sound">an</span></div>
+                            <div class="map-item"><span>ang</span> <span>→</span> <span class="vn-sound">ang</span></div>
+                            <div class="map-item"><span>en</span> <span>→</span> <span class="vn-sound">ân</span></div>
+                            <div class="map-item"><span>eng</span> <span>→</span> <span class="vn-sound">âng</span></div>
+                            <div class="map-item"><span>in</span> <span>→</span> <span class="vn-sound">in</span></div>
+                            <div class="map-item"><span>ing</span> <span>→</span> <span class="vn-sound">inh</span></div>
+                            <div class="map-item"><span>ian</span> <span>→</span> <span class="vn-sound">iên</span></div>
+                        </div>
+                        <div class="mapping-col">
+                            <div class="map-item"><span>iang</span> <span>→</span> <span class="vn-sound">iêng</span></div>
+                            <div class="map-item"><span>iao</span> <span>→</span> <span class="vn-sound">ieo</span></div>
+                            <div class="map-item"><span>ia</span> <span>→</span> <span class="vn-sound">ia</span></div>
+                            <div class="map-item"><span>iu</span> <span>→</span> <span class="vn-sound">iêu</span></div>
+                            <div class="map-item"><span>ie</span> <span>→</span> <span class="vn-sound">ie</span></div>
+                            <div class="map-item"><span>uo</span> <span>→</span> <span class="vn-sound">ua</span></div>
+                            <div class="map-item"><span>ua</span> <span>→</span> <span class="vn-sound">oa</span></div>
+                            <div class="map-item"><span>uai</span> <span>→</span> <span class="vn-sound">oai</span></div>
+                            <div class="map-item"><span>uan</span> <span>→</span> <span class="vn-sound">oan</span></div>
+                            <div class="map-item"><span>iong</span> <span>→</span> <span class="vn-sound">iung</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="divider-dashed">
+
+                <div class="pinyin-section">
+                    <h3 class="notebook-title">III. Thanh Điệu</h3>
+                    <div class="tones-list">
+                        <div class="tone-row">
+                            <span class="tone-symbol">1 ( — )</span>
+                            <span class="tone-arrow">→</span>
+                            <span class="tone-meaning">Đọc kéo dài</span>
+                        </div>
+                        <div class="tone-row">
+                            <span class="tone-symbol">2 ( / )</span>
+                            <span class="tone-arrow">→</span>
+                            <span class="tone-meaning">Đọc dấu hỏi</span>
+                        </div>
+                        <div class="tone-row">
+                            <span class="tone-symbol">3 ( v )</span>
+                            <span class="tone-arrow">→</span>
+                            <span class="tone-meaning">Đọc dấu huyền</span>
+                        </div>
+                        <div class="tone-row">
+                            <span class="tone-symbol">4 ( \ )</span>
+                            <span class="tone-arrow">→</span>
+                            <span class="tone-meaning">Đọc dứt khoát</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="lessons-data.js"></script> 
+    <script src="script.js"></script>       
+</body>
+</html>
